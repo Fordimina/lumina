@@ -25,7 +25,7 @@ export async function getCurrentProfile() {
   // If missing, create a default profile
   const defaultProfile = {
     id: user.id,
-    username: user.email.split("@")[0],
+    username: (user.email ?? "user").split("@")[0],
     role: "GUEST",
   };
 
