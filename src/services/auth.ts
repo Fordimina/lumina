@@ -6,16 +6,15 @@ export async function loginWithEmail(email: string, password: string) {
 
 export async function getCurrentProfile() {
   const { data: { user } } = await supabase.auth.getUser();
-
   if (!user) return null;
 
-  const { data: profile } = await supabase
+  const { data } = await supabase
     .from("profiles")
     .select("username, role")
     .eq("id", user.id)
     .single();
 
-  return profile;
+  return data;
 }
 
 export async function logout() {
