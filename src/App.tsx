@@ -6,6 +6,7 @@ import LoginModal from "./components/LoginModal";
 import AdminPanel from "./components/AdminPanel";
 import Lightbox from "./components/Lightbox";
 import AboutSection from "./components/AboutSection";
+import { logout } from "./services/auth";
 
 import {
   MediaItem,
@@ -323,7 +324,7 @@ const App: React.FC = () => {
     setUsername(name);
   };
 
-  const handleLogout = () => {
+  const handleLogout = async () => {
     setUserRole("GUEST");
     setUsername("");
     setIsUploadModalOpen(false);

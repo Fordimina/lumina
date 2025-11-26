@@ -1,5 +1,6 @@
 import { createClient } from '@supabase/supabase-js';
 import { MediaItem } from '../types';
+import { createClient } from "@supabase/supabase-js";
 
 // Check for environment variables
 const supabaseUrl = import.meta.env.VITE_SUPABASE_URL;
@@ -110,3 +111,15 @@ export const fetchSettings = async (): Promise<string | null> => {
   }
   return data.value;
 };
+
+//for Auth
+
+const supabaseUrl = import.meta.env.VITE_SUPABASE_URL!;
+const supabaseAnon = import.meta.env.VITE_SUPABASE_ANON_KEY!;
+
+export const supabase = createClient(supabaseUrl, supabaseAnon, {
+  auth: {
+    persistSession: true,
+    autoRefreshToken: true,
+  },
+});
