@@ -1,6 +1,5 @@
 import { createClient } from '@supabase/supabase-js';
 import { MediaItem } from '../types';
-import Lightbox from "./components/Lightbox";
 
 // Check for environment variables
 const supabaseUrl = import.meta.env.VITE_SUPABASE_URL;

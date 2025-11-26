@@ -7,6 +7,29 @@ export default defineConfig({
     react(),
     VitePWA({
       registerType: "autoUpdate",
+
+      // 🔥 MERGED WORKBOX CONFIG
+      workbox: {
+        navigateFallback: "index.html",
+        sourcemap: false,
+        mode: "development",
+
+        runtimeCaching: [
+          {
+            // Cache Supabase media (images, videos)
+            urlPattern: ({ url }) => url.origin.includes(".supabase.co"),
+            handler: "CacheFirst",
+            options: {
+              cacheName: "supabase-media-cache",
+              expiration: {
+                maxEntries: 200,
+                maxAgeSeconds: 60 * 60 * 24 * 30, // 30 days
+              },
+            },
+          },
+        ],
+      },
+
       manifest: {
         name: "Lumina Gallery",
         short_name: "Lumina",

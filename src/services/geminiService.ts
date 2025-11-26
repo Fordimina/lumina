@@ -1,6 +1,5 @@
 import { GoogleGenAI, Type } from "@google/genai";
 import { AISuggestion } from "../types";
-import Lightbox from "./components/Lightbox";
 
 // Initialize Gemini Client
 // Note: In a real production app, you might proxy this through a backend to hide the key,
