@@ -11,6 +11,9 @@ export const supabase = createClient(supabaseUrl, supabaseAnonKey, {
   auth: {
     persistSession: true,
     autoRefreshToken: true,
+    flowType: "pkce",          // ← Required for modern Supabase auth
+    detectSessionInUrl: true,  // ← Needed for PKCE redirect login
+    storage: window.localStorage, // ← Fixes refresh logout in PWAs
   },
 });
 
