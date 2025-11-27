@@ -11,11 +11,21 @@ export const supabase = createClient(supabaseUrl, supabaseAnonKey, {
   auth: {
     persistSession: true,
     autoRefreshToken: true,
-    flowType: "pkce",          // ← Required for modern Supabase auth
-    detectSessionInUrl: true,  // ← Needed for PKCE redirect login
-    storage: window.localStorage, // ← Fixes refresh logout in PWAs
+    flowType: "pkce",
+    detectSessionInUrl: true,
+    storage: window.localStorage,
   },
 });
+
+// ----------------------------------------------
+// 🧠 Global Singleton (critical for fixing logout)
+// ----------------------------------------------
+if (typeof window !== "undefined") {
+  // @ts-ignore
+  window.__supabase = window.__supabase || supabase;
+  // @ts-ignore
+  window.supabase = window.__supabase;
+}
 
 // --- Database Operations ---
 
