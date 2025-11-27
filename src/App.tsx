@@ -123,6 +123,50 @@ const App: React.FC = () => {
         };
   });
 
+  // Restore session + keep auth in sync
+useEffect(() => {
+  let ignore = false;
+
+  async function load() {
+    // Load existing session immediately
+    const {
+      data: { session },
+    } = await supabase.auth.getSession();
+
+    if (session && !ignore) {
+      const profile = await getCurrentProfile();
+      if (profile) {
+        setUserRole(profile.role);
+        setUsername(profile.username);
+      }
+    }
+  }
+
+  load();
+
+  // Listen for login/logout/token refresh
+  const { data: subscription } = supabase.auth.onAuthStateChange(
+    async (_event, session) => {
+      if (session) {
+        const profile = await getCurrentProfile();
+        if (profile) {
+          setUserRole(profile.role);
+          setUsername(profile.username);
+        }
+      } else {
+        setUserRole("GUEST");
+        setUsername("");
+      }
+    }
+  );
+
+  return () => {
+    ignore = true;
+    subscription.subscription.unsubscribe();
+  };
+}, []);
+
+  
   // -----------------------------
   // Offline Upload Queue Handling
   // -----------------------------
