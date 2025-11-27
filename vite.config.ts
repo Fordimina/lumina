@@ -12,8 +12,6 @@ export default defineConfig({
       workbox: {
         navigateFallback: "index.html",
         sourcemap: false,
-        mode: "development",
-
         runtimeCaching: [
           {
             // Cache Supabase media (images, videos)
