@@ -125,30 +125,29 @@ const App: React.FC = () => {
         };
   });
 
-  // Restore session + keep auth in sync
+// --- FIX: Safe Supabase Session Hydration ---
+const [authReady, setAuthReady] = useState(false);
+
 useEffect(() => {
-  let ignore = false;
+  // 1. Let Supabase hydrate LOCAL STORAGE first
+  supabase.auth.getSession().then(async ({ data: { session } }) => {
+    // Supabase hydration finished
+    setAuthReady(true);
 
-  async function load() {
-    // Load existing session immediately
-    const {
-      data: { session },
-    } = await supabase.auth.getSession();
-
-    if (session && !ignore) {
+    if (session) {
       const profile = await getCurrentProfile();
       if (profile) {
         setUserRole(profile.role);
         setUsername(profile.username);
       }
     }
-  }
+  });
 
-  load();
+  // 2. Listen for future auth changes ONLY AFTER hydration
+  const { data: listener } = supabase.auth.onAuthStateChange(
+    async (_event, session) => {
+      if (!authReady) return; // <--- THE MAGIC LINE
 
-  // Listen for login/logout/token refresh
-  const { data: subscription } = supabase.auth.onAuthStateChange(
-    async (_event: any, session: any) => {
       if (session) {
         const profile = await getCurrentProfile();
         if (profile) {
@@ -162,11 +161,8 @@ useEffect(() => {
     }
   );
 
-  return () => {
-    ignore = true;
-    subscription.subscription.unsubscribe();
-  };
-}, []);
+  return () => listener.subscription.unsubscribe();
+}, [authReady]);
 
   
   // -----------------------------
