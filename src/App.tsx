@@ -7,6 +7,8 @@ import AdminPanel from "./components/AdminPanel";
 import Lightbox from "./components/Lightbox";
 import AboutSection from "./components/AboutSection";
 import { logout } from "./services/auth";
+import { supabase } from "./services/supabaseClient";
+import { getCurrentProfile } from "./services/auth";
 
 import {
   MediaItem,
@@ -146,7 +148,7 @@ useEffect(() => {
 
   // Listen for login/logout/token refresh
   const { data: subscription } = supabase.auth.onAuthStateChange(
-    async (_event, session) => {
+    async (_event: any, session: any) => {
       if (session) {
         const profile = await getCurrentProfile();
         if (profile) {
