@@ -8,37 +8,46 @@ export default defineConfig({
     VitePWA({
       registerType: "autoUpdate",
 
-      // 🔥 MERGED WORKBOX CONFIG
       workbox: {
         navigateFallback: "index.html",
         sourcemap: false,
+
         runtimeCaching: [
-  {
-    // Cache ONLY Supabase storage images
-    urlPattern: ({ url }) =>
-      url.origin.includes(".supabase.co") &&
-      url.pathname.startsWith("/storage/v1/object/public"),
-    handler: "CacheFirst",
-    options: {
-      cacheName: "supabase-media-cache",
-      expiration: {
-        maxEntries: 200,
-        maxAgeSeconds: 60 * 60 * 24 * 30,
-      },
-    },
-  },
-  {
-    // NEVER cache Supabase PostgREST responses
-    urlPattern: ({ url }) =>
-      url.origin.includes(".supabase.co") &&
-      url.pathname.startsWith("/rest/v1"),
-    handler: "NetworkFirst",
-    options: {
-      cacheName: "supabase-api-cache",
-      networkTimeoutSeconds: 5,
-    },
-  },
-],
+          {
+            // 🚫 Prevent infinite refresh loop — never cache auth redirects
+            urlPattern: ({ url }) =>
+              url.origin.includes(".supabase.co") &&
+              url.pathname.startsWith("/auth/v1"),
+            handler: "NetworkOnly",
+          },
+
+          {
+            // Cache Supabase storage images ONLY
+            urlPattern: ({ url }) =>
+              url.origin.includes(".supabase.co") &&
+              url.pathname.startsWith("/storage/v1/object/public"),
+            handler: "CacheFirst",
+            options: {
+              cacheName: "supabase-media-cache",
+              expiration: {
+                maxEntries: 200,
+                maxAgeSeconds: 60 * 60 * 24 * 30,
+              },
+            },
+          },
+
+          {
+            // Always get fresh posts (prevents stale gallery)
+            urlPattern: ({ url }) =>
+              url.origin.includes(".supabase.co") &&
+              url.pathname.startsWith("/rest/v1"),
+            handler: "NetworkFirst",
+            options: {
+              cacheName: "supabase-api-cache",
+              networkTimeoutSeconds: 5,
+            },
+          },
+        ],
       },
 
       manifest: {
