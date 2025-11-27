@@ -13,19 +13,32 @@ export default defineConfig({
         navigateFallback: "index.html",
         sourcemap: false,
         runtimeCaching: [
-          {
-            // Cache Supabase media (images, videos)
-            urlPattern: ({ url }) => url.origin.includes(".supabase.co"),
-            handler: "CacheFirst",
-            options: {
-              cacheName: "supabase-media-cache",
-              expiration: {
-                maxEntries: 200,
-                maxAgeSeconds: 60 * 60 * 24 * 30, // 30 days
-              },
-            },
-          },
-        ],
+  {
+    // Cache ONLY Supabase storage images
+    urlPattern: ({ url }) =>
+      url.origin.includes(".supabase.co") &&
+      url.pathname.startsWith("/storage/v1/object/public"),
+    handler: "CacheFirst",
+    options: {
+      cacheName: "supabase-media-cache",
+      expiration: {
+        maxEntries: 200,
+        maxAgeSeconds: 60 * 60 * 24 * 30,
+      },
+    },
+  },
+  {
+    // NEVER cache Supabase PostgREST responses
+    urlPattern: ({ url }) =>
+      url.origin.includes(".supabase.co") &&
+      url.pathname.startsWith("/rest/v1"),
+    handler: "NetworkFirst",
+    options: {
+      cacheName: "supabase-api-cache",
+      networkTimeoutSeconds: 5,
+    },
+  },
+],
       },
 
       manifest: {
