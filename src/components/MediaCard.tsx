@@ -8,6 +8,8 @@ interface MediaCardProps {
   userRole: UserRole;
   onDelete: (id: string) => void;
   onPreview: (item: MediaItem) => void;
+  // NEW
+  onEdit?: (item: MediaItem) => void;
 }
 
 const MediaCard: React.FC<MediaCardProps> = ({ item, userRole, onDelete, onPreview }) => {
