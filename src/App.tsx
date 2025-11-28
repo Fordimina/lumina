@@ -112,6 +112,13 @@ const App: React.FC = () => {
   // Lightbox State
   const [selectedMedia, setSelectedMedia] = useState<MediaItem | null>(null);
 
+  // EDIT STATE
+const [editingItem, setEditingItem] = useState<MediaItem | null>(null);
+const handleEdit = (item: MediaItem) => {
+  setEditingItem(item);   // Select item to edit
+  // Later this will open EditModal
+  };
+  
   // App Settings (Hybrid: some local, some from DB)
   const [appSettings, setAppSettings] = useState<AppSettings>(() => {
     const savedSettings = localStorage.getItem("lumina_settings");
