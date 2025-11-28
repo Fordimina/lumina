@@ -12,7 +12,7 @@ interface MediaCardProps {
   onEdit?: (item: MediaItem) => void;
 }
 
-const MediaCard: React.FC<MediaCardProps> = ({ item, userRole, onDelete, onPreview }) => {
+const MediaCard: React.FC<MediaCardProps> = ({ item, userRole, onDelete, onPreview, onEdit }) => {
   const [isLoaded, setIsLoaded] = useState(false);
 
   const formattedDate = new Date(item.timestamp).toLocaleDateString(undefined, {
