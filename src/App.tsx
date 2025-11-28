@@ -9,6 +9,7 @@ import AboutSection from "./components/AboutSection";
 import { logout } from "./services/auth";
 import { supabase } from "./services/supabaseClient";
 import { getCurrentProfile } from "./services/auth";
+import EditModal from "./components/EditModal";
 
 import {
   MediaItem,
@@ -36,6 +37,8 @@ import {
   saveSettings,
   uploadFileToStorage,
 } from "./services/supabaseClient";
+
+import { updatePost } from "./services/posts";
 
 import {
   getAllPendingUploads,
