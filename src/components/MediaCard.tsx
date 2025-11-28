@@ -112,16 +112,30 @@ const MediaCard: React.FC<MediaCardProps> = ({ item, userRole, onDelete, onPrevi
         </div>
       </div>
 
-      {/* Delete Button - Positioned OUTSIDE the overflow-hidden container and clickable areas */}
-      {userRole !== 'GUEST' && (
-        <button
-          onClick={handleDeleteClick}
-          className="absolute top-[-10px] left-[-10px] z-50 bg-red-500 hover:bg-red-600 text-white p-2 rounded-full shadow-lg border-2 border-zinc-900 opacity-0 group-hover:opacity-100 transition-all duration-200 scale-90 hover:scale-110"
-          title="Delete Post"
-        >
-          <Trash2 className="w-4 h-4" />
-        </button>
-      )}
+      {/* Delete Button */}
+{userRole !== 'GUEST' && (
+  <button
+    onClick={handleDeleteClick}
+    className="absolute top-[-10px] left-[-10px] z-50 bg-red-500 hover:bg-red-600 text-white p-2 rounded-full shadow-lg border-2 border-zinc-900 opacity-0 group-hover:opacity-100 transition-all duration-200 scale-90 hover:scale-110"
+    title="Delete Post"
+  >
+    <Trash2 className="w-4 h-4" />
+  </button>
+)}
+
+/* Edit Button */
+{userRole !== 'GUEST' && onEdit && (
+  <button
+    onClick={(e) => {
+      e.stopPropagation();
+      onEdit(item);
+    }}
+    className="absolute top-[-10px] right-[-10px] z-50 bg-blue-500 hover:bg-blue-600 text-white p-2 rounded-full shadow-lg border-2 border-zinc-900 opacity-0 group-hover:opacity-100 transition-all duration-200 scale-90 hover:scale-110"
+    title="Edit Post"
+  >
+    ✎
+  </button>
+)}
     </div>
   );
 };
