@@ -1,6 +1,10 @@
 import { supabase } from "./supabaseClient";
+import { MediaItem } from "../types";
 
-export async function updatePost(id, fields) {
+export async function updatePost(
+  id: string,
+  fields: Partial<MediaItem>
+) {
   const { error } = await supabase
     .from("posts")
     .update(fields)
