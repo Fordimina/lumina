@@ -486,6 +486,7 @@ useEffect(() => {
                   userRole={userRole}
                   onDelete={handleDelete}
                   onPreview={setSelectedMedia}
+                  onEdit={handleEdit}
                 />
               ))}
             </div>
